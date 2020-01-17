@@ -59,17 +59,7 @@ export default class ViewPager extends Component {
     }
 
     render () {
-        /*return (this.props.forceScrollView || Platform.OS === 'ios') ? this._renderOnIOS() : (
-            <ViewPagerAndroid
-                {...this.props}
-                scrollEnabled={this.props.horizontalScroll ? true : false}
-                ref={VIEWPAGER_REF}
-                key={this.props.children ? this.props.children.length : 0}
-                onPageScroll={this._onPageScrollOnAndroid}
-                onPageSelected={this._onPageSelectedOnAndroid}
-            />
-        )*/
-        <__ViewPager
+        return <__ViewPager
             {...this.props}
             scrollEnabled={this.props.horizontalScroll ? true : false}
             ref={VIEWPAGER_REF}
@@ -139,7 +129,7 @@ export default class ViewPager extends Component {
 
     _onScrollViewLayout (event) {
         let {width, height} = event.nativeEvent.layout
-        this.setState({width, height}, () => Platform.OS === 'ios' && this.setPageWithoutAnimation(this.state.page))
+        this.setState({width, height}, () => {})
     }
 
     _childrenWithOverridenStyle () {
@@ -173,21 +163,14 @@ export default class ViewPager extends Component {
 
     setPageWithoutAnimation (selectedPage) {
         this.setState({page: selectedPage})
-        if (this.props.forceScrollView || Platform.OS === 'ios')
-            this.refs[SCROLLVIEW_REF].scrollTo({x: this.state.width * selectedPage, animated: false})
-        else {
-            this.refs[VIEWPAGER_REF].setPageWithoutAnimation(selectedPage)
-            if (this.props.onPageSelected) this.props.onPageSelected({position: selectedPage})
-        }
+        this.refs[VIEWPAGER_REF].setPageWithoutAnimation(selectedPage)
+        if (this.props.onPageSelected) this.props.onPageSelected({position: selectedPage})
     }
 
     setPage (selectedPage) {
-        this.setState({page: selectedPage})
-        if (this.props.forceScrollView || Platform.OS === 'ios') this.refs[SCROLLVIEW_REF].scrollTo({x: this.state.width * selectedPage})
-        else {
-            this.refs[VIEWPAGER_REF].setPage(selectedPage)
-            if (this.props.onPageSelected) this.props.onPageSelected({position: selectedPage})
-        }
+        this.setState({page: selectedPage});
+        this.refs[VIEWPAGER_REF].setPage(selectedPage)
+        if (this.props.onPageSelected) this.props.onPageSelected({position: selectedPage})
     }
 
 }
